@@ -44,17 +44,61 @@ feesDataSummaryByCredit <- function(df = data.list$raw, credits=9) {
   return(data.list)
 }
 
-feesDataSummary.df.list <- feesDataSummaryByCredit(credits = 12)
+plotFeesByUniversity <- function(credits=9, df=data.list$raw, residency="Resident") {
+
+  # Get fees data
+  feesDataSummary.df.list <- feesDataSummaryByUniversity(credits = credits, df=df)
+  
+  # Plot depending on residency/non-residency
+  if(residency=="Resident") {
+    ggplot(data=feesDataSummary.df.list$summaryByAY.melt$Resident, 
+           aes(
+             x=AY, 
+             y=Total.Fees, 
+             group=University,
+             colour=University
+           )
+    ) + geom_line() + geom_point()
+  } else if(residency=="Non-Resident") {
+    ggplot(data=feesDataSummary.df.list$summaryByAY.melt$Non.Resident, 
+           aes(
+             x=AY, 
+             y=Total.Fees, 
+             group=University,
+             colour=University
+           )
+    ) + geom_line() + geom_point()
+  }
+}
+
+plotFeesByCategory <- function(credits=9, df=data.list$raw, residency="Resident") {
+  
+  # Get fees data
+  feesDataSummary.df.list <- feesDataSummaryByCategory(credits = credits, df=df)
+  
+  # Plot depending on residency/non-residency
+  if(residency=="Resident") {
+    ggplot(data=feesDataSummary.df.list$summaryByAY.melt$Resident, 
+           aes(
+             x=AY, 
+             y=Mean.Fees, 
+             group=Category,
+             colour=Category
+           )
+    ) + geom_line() + geom_point()
+  } else if(residency=="Non-Resident") {
+    ggplot(data=feesDataSummary.df.list$summaryByAY.melt$Non.Resident, 
+           aes(
+             x=AY, 
+             y=Mean.Fees, 
+             group=Category,
+             colour=Category
+           )
+    ) + geom_line() + geom_point()
+  }
+}
 
 
-ggplot(data=feesDataSummary.df.list$summaryByAY.melt, 
-  aes(
-    x=AY, 
-    y=Total.Fees, 
-    group=University,
-    colour=University
-    )
-) + geom_line() + geom_point()
 
 
 
